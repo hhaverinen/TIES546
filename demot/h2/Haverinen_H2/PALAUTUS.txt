@@ -1,0 +1,15 @@
+Mikä oli hankalaa:
+Mielestäni tehtävä oli helpompi kuin harjoitus 1 (johtunee vahvasta Java-taustastani). Tehtävä oli myös aika suoraviivainen, mutta hetki meni miettiessä/debugatessa mistä bugit johtuvat.
+
+Mitä opin:
+En ole aiemmin JUnit-testejä kirjoittanut, joten näiden toiminnasta ja kirjoittamisesta sain hyvän käsityksen. Lisäksi JaCoCo (ja muutkin kattavuustyökalut) olivat täysin uusi tuttavuus.
+
+Miksi saavuttamani kattavuus on vain 83%:
+Calc.unexpected()-metodin ensimmäisen if-lauseen poikkeusta ei saavuteta (rivi 142), koska ohjelman suoritus päättyy aikaisemmin "java.lang.ArrayIndexOutOfBoundsException" -virheeseen. (Kts. CalcTest.testUnexpectedEnd()). Nähdäkseni tämä on myös bugi, koska ko. virhe pitäisi nousta juurikin ennenaikaisen syötteen loppumisen takia.
+
+Calc.computeFactor()-metodin sisempää if-lausetta ja sen jälkeistä riviä ei saavuteta (rivit 77, 78), koska rivin 76. "int rv = compute();" ei koskaan palaudu vaan heittää poikkeuksen riviltä 44. Tässä on siis myös bugi: compute()-metodi ei tässä tapauksessa palauta tulosta koskaan, koska metodissa ei ole tarkistusta päättävälle kaarisululle ')'. Lisäksi JaCoCo ei tunnista riviä 44. saavututeksi vaikka heittääkin poikkeuksen (luentokalvoilla maininta tästä JaCoCo:n "ominaisuudesta").
+
+Calc.computeTerm()-metodin switch-casen default-lohkoa ei koskaan saavuteta, koska while-silmukan ehtolausekkeessa on jo tarkistus, että seuraava merkki on varmasti "*" tai "/".
+
+Lisäys:
+Usean testitapauksen voisi yhdistää, mutta näin selkeyden ja harjoituksen kannalta parhaaksi tehdä melko yksityiskohtaiset testitapaukset.

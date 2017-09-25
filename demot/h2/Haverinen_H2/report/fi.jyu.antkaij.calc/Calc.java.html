@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Calc.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">calc</a> &gt; <a href="index.source.html" class="el_package">fi.jyu.antkaij.calc</a> &gt; <span class="el_source">Calc.java</span></div><h1>Calc.java</h1><pre class="source lang-java linenums">// A sample simple calculator
+// Copyright © 2017 Antti-Juhani Kaijanaho
+
+//     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
+
+//         http://www.apache.org/licenses/LICENSE-2.0
+
+//     Unless required by applicable law or agreed to in writing,
+//     software distributed under the License is distributed on an &quot;AS
+//     IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+//     express or implied.  See the License for the specific language
+//     governing permissions and limitations under the License.
+
+package fi.jyu.antkaij.calc;
+
+import static java.lang.Character.digit;
+import static java.lang.Character.isDigit;
+import static java.lang.Character.isWhitespace;
+
+public class Calc {
+
+    /** Computes the integer value of the given arithmetical expression. */
+    public static int compute(String s) {
+<span class="fc" id="L26">        Calc c = new Calc(s);</span>
+<span class="fc" id="L27">        return c.compute();</span>
+    }
+
+    /** Computes the integer value of the remaining arithmetical expression. */
+    private int compute() {
+<span class="fc" id="L32">        int a = computeTerm();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        while (!endOfInput()) {</span>
+<span class="pc bpc" id="L34" title="1 of 3 branches missed.">            switch (peekChar()) {</span>
+            case '+':
+<span class="fc" id="L36">                getChar();</span>
+<span class="fc" id="L37">                a = a + computeTerm();</span>
+<span class="fc" id="L38">                break;</span>
+            case '-':
+<span class="fc" id="L40">                getChar();</span>
+<span class="fc" id="L41">                a = a - computeTerm();</span>
+<span class="fc" id="L42">                break;</span>
+            default:
+<span class="nc" id="L44">                unexpected(&quot;'+', '-', or the end of input&quot;);</span>
+            }
+        }
+<span class="fc" id="L47">        return a;</span>
+    }
+
+    /** Computes the integer value of the remaining arithmetical expression,
+        up to (but not including) the next + or - sign. */
+    private int computeTerm() {
+<span class="fc" id="L53">        int a = computeFactor();</span>
+<span class="fc bfc" id="L54" title="All 6 branches covered.">        while (!endOfInput() &amp;&amp; (peekChar() == '*' || peekChar() == '/')) {</span>
+<span class="fc" id="L55">            char op = getChar();</span>
+<span class="fc" id="L56">            int b = computeFactor();</span>
+<span class="pc bpc" id="L57" title="1 of 3 branches missed.">            switch (op) {</span>
+            case '*':
+<span class="fc" id="L59">                a = a * b;</span>
+<span class="fc" id="L60">                break;</span>
+            case '/':
+<span class="fc" id="L62">                a = a - b;</span>
+<span class="fc" id="L63">                break;</span>
+            default:
+<span class="nc" id="L65">                unexpected(&quot;'*', '/', or the end of input&quot;);</span>
+            }
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">        return a;</span>
+    }
+
+    /** Computes the integer value of a single integer constant, or
+        of an arithmetical expression in parentheses. */
+    private int computeFactor() {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (peekChar() == '(') {</span>
+<span class="fc" id="L75">            getChar();</span>
+<span class="fc" id="L76">            int rv = compute();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (getChar() != ')') throw new ParseException(&quot;missing ')'&quot;);</span>
+<span class="nc" id="L78">            return rv;</span>
+        }
+<span class="fc" id="L80">        return getInt();</span>
+    }
+
+    /** The full input string. */
+    private final char[] input;
+    /** Index to input indicating the next character not yet read. */
+<span class="fc" id="L86">    private int inx = 0;</span>
+
+    /** Initializes the calculator object.
+
+        @param s the input string
+    */
+<span class="fc" id="L92">    private Calc(String s) {</span>
+<span class="fc" id="L93">        input = s.toCharArray();</span>
+<span class="fc" id="L94">    }</span>
+
+    /** Determines whether the end of input has been reached. */
+    private boolean endOfInput() {
+<span class="fc" id="L98">        skipWhitespace();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        return inx &gt;= input.length;</span>
+    }
+
+    /** Returns (but does not mark read) the next input character. */
+    private char peekChar() {
+<span class="fc" id="L104">        skipWhitespace();</span>
+<span class="fc" id="L105">        return input[inx];</span>
+    }
+
+    /** Returns (and marks read) the next input character. */
+    private char getChar() {
+<span class="fc" id="L110">        skipWhitespace();</span>
+<span class="fc" id="L111">        return input[inx++];</span>
+    }
+
+    /** Returns the integer constant that the next input characters comprise,
+        and marks those characters read.
+        If  the next input character does not start an integer constant,
+        the return value is arbitrary.
+    */
+    private int getInt() {
+<span class="fc" id="L120">        skipWhitespace();</span>
+<span class="fc" id="L121">        int rv = 0;</span>
+        do {
+<span class="fc" id="L123">            rv = 10 * rv + digit(input[inx], 10);</span>
+<span class="fc" id="L124">            inx++;</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        } while (inx &lt; input.length &amp;&amp;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                 isDigit(input[inx]));</span>
+<span class="fc" id="L127">        return rv;</span>
+    }
+
+    /** If the next input characters are whitespace, marks them read. */
+    private void skipWhitespace() {
+<span class="fc bfc" id="L132" title="All 4 branches covered.">        while (inx &lt; input.length &amp;&amp; isWhitespace(input[inx])) inx++;</span>
+<span class="fc" id="L133">    }</span>
+
+    /** Throws a ParseException indicating that the next input character
+        is not what was expected
+
+        @param what a string describing the expected next character
+    */
+    private void unexpected(String what) {
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (endOfInput()) {</span>
+<span class="nc" id="L142">            throw new ParseException(&quot;premature end of input, expected &quot; +</span>
+                                     what);
+        } else {
+<span class="fc" id="L145">            throw new ParseException(&quot;got &quot; + peekChar() + &quot;, expected &quot; +</span>
+                                     what);
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
