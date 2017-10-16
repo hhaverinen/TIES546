@@ -1,0 +1,36 @@
+Calc.compute(String) -metodin ositus ja ekvivalenssiluokat:
+
+Ositus syötteessä olevien laskumerkkien perusteella:
++
+-
+*
+/
+() // näiden oltava yhdessä
+
+Nämä viisi luokkaa kattavat sallitut laskumerkinnät lausekkeissa, koska muita laskuoperaatioita / merkintöjä ei tueta. Luokat eivät myöskään ole päällekkäisiä, sillä jokainen on oma laskuoperaationsa (tai sulkumerkintä ryhmittelyyn).
+
+Ositus syötteessä olevien numeroiden perusteella:
+=0
+<0
+>0
+
+Nämä kolme luokkaa kattavat kaikki mahdolliset numerot, eikä näiden luokkien kesken ole päällekkäisyyksiä.
+
+Löydetyt bugit:
+testDivide() -testi:
+  jakolaskun tulos ei ole mitä sen pitäisi olla. Koodia lueskelemassa selviää, että jakolaskun tilalla käytetäänkin miinus-operaattoria.
+
+testDivideByZero() - testi:
+  odotuksena ArithmeticException-luokan poikkeus. Kuitenkin poikkeusta ei heitetä, koska jakolaskun sijasta suoritetaankin miinus-lasku (vrt. testDivide() -testi).
+
+testNegativeNumber() -testi:
+  odotuksena ParseException-luokan poikkeus (koska ohjelma ei tue negatiivisa lukuja). Ohjelma kuitenkin palauttaa laskutuloksen, joskin se on täysin väärä.
+
+Mikä oli hankalaa:
+Osituksen tekeminen oli hankalaa, kenties siitä syystä että syöte annetaan kokonaisena lausekkeena, eikä yksittäisinä parametreina. Minulle helpompaa oli hahmottaa esimerkiksi luennolla käydyt esimerkit kolmiosta / contains() -metodista, jossa syötteet ovat erillisinä parametreina. Lisäksi syötteen jakaminen esimerkiksi numeroalueiden perusteella on helpommin hahmotettavissa, kuin tässä tehtävässä esimerkiksi laskumerkintöjen perusteella (jos se nyt on kelvollinen ositus tapa!).
+
+Mitä opin:
+Opin perusymmärryksen osituksista / ekvivalenssiluokista ja mihin sillä pyritään. Uskon, että jos näitä tapauksia harjoittelisi enemmän, niin alkaisi kehittyä "silmää" minkälaisia osituksia kannattaa tehdä.
+
+Lisäys:
+Tehtävänannosta "Mikäli teet useamman osituksen, käytä osiokattavuuden kriteeriä." kohta jäi minulle hieman epäselväksi, tarkoitetaanko useammalla osituksella useampaa kuin yksi, vai useampaa kuin yksi - kaksi (vrt. tehtävänannon edellinen lause). Tehtävässäni on siis kaksi ositusta ja tein testit osiokattavuuden kriteerillä.
