@@ -1,0 +1,5 @@
+Mitä opin:
+Opin mitä mutaatiotestaus tarkoittaa ja miten sitä käytännössä tehdään. Sain myös tietoa erilaisista mutaatiotestaustyökaluista.
+
+Mikä oli vaikeaa:
+Aluksi oli hieman hankala hahmottaa kuinka PIT-raportin tuloksien perusteella kannattaisi työstää uusia testitapauksia, ts. oli hankala hahmottaa millaiset testitapaukset aiheuttavat erilaisen tuloksen mutaatiotestauksessa. Homman jujusta sai kuitenkin kiinni aikansa asian kanssa pähkäiltyä.
